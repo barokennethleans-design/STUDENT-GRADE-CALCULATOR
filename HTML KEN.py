@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Grade Calculator &amp; Class Record Tracker (MCO 2)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <p class="eyebrow">CpE 2 – Programming Logic and Design • Major Course Output 2</p>
+      <h1>Student Grade Calculator &amp; Class Record Tracker</h1>
+      <p class="subtitle">
+        Weights: Quizzes 30% • Activities 20% • Midterm 20% • Final 30% • Passing Grade: 75%
+      </p>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section class="card form-card" aria-labelledby="form-heading">
+      <h2 id="form-heading">Add Student Record</h2>
+      <form id="grade-form" novalidate>
+        <div class="field">
+          <label for="student-name">Student Name</label>
+          <input
+            type="text"
+            id="student-name"
+            name="studentName"
+            placeholder="e.g., Juan Dela Cruz"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="quiz-scores">Quiz Scores (comma-separated, 0–100)</label>
+          <input
+            type="text"
+            id="quiz-scores"
+            name="quizScores"
+            placeholder="e.g., 85, 90, 78, 92"
+            required
+          />
+          <small class="hint">At least one score; plain decimal numbers from 0 to 100.</small>
+        </div>
+
+        <div class="field">
+          <label for="activity-scores">Activity Scores (comma-separated, 0–100)</label>
+          <input
+            type="text"
+            id="activity-scores"
+            name="activityScores"
+            placeholder="e.g., 88, 94, 86"
+            required
+          />
+          <small class="hint">At least one score; plain decimal numbers from 0 to 100.</small>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="midterm-exam">Midterm Exam (0–100)</label>
+            <input
+              type="text"
+              id="midterm-exam"
+              name="midtermExam"
+              placeholder="e.g., 87"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="final-exam">Final Exam (0–100)</label>
+            <input
+              type="text"
+              id="final-exam"
+              name="finalExam"
+              placeholder="e.g., 91"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="field checkbox-field">
+          <label class="checkbox-label" for="drop-lowest-quiz">
+            <input type="checkbox" id="drop-lowest-quiz" name="dropLowestQuiz" />
+            <span>Drop lowest quiz (applies when checked and 2+ quizzes exist)</span>
+          </label>
+        </div>
+
+        <div id="error-box" class="error-box hidden" role="alert" aria-live="polite"></div>
+
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Add Student</button>
+          <button type="button" id="load-sample-btn" class="btn btn-secondary">Load Sample Data</button>
+          <button type="button" id="run-tests-btn" class="btn btn-outline">Run Unit Tests (tests.js)</button>
+          <button type="button" id="clear-record-btn" class="btn btn-danger">Clear Record</button>
+        </div>
+      </form>
+    </section>
+
+    <div class="right-column">
+      <section class="card stats-card" aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Class Statistics</h2>
+        <div class="stats-grid" id="stats-panel">
+          <div class="stat-item">
+            <span class="stat-label">Students</span>
+            <span class="stat-value" id="stat-count">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Class Mean</span>
+            <span class="stat-value" id="stat-mean">0.00%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Highest Grade</span>
+            <span class="stat-value" id="stat-highest">0.00%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Lowest Grade</span>
+            <span class="stat-value" id="stat-lowest">0.00%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Passed / Failed</span>
+            <span class="stat-value" id="stat-pass-fail">0 / 0</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card table-card" aria-labelledby="record-heading">
+        <div class="table-header">
+          <h2 id="record-heading">Ranked Class Record</h2>
+          <span class="badge" id="record-badge">Sorted Highest to Lowest</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Quiz Avg</th>
+                <th>Activity Avg</th>
+                <th>Midterm</th>
+                <th>Final</th>
+                <th>Grade %</th>
+                <th>Equivalent</th>
+                <th>Remarks</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="record-tbody">
+              <tr class="empty-row">
+                <td colspan="10">No student records yet. Add a student or click "Load Sample Data".</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="test-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="test-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="test-modal-title">Unit Test Results (tests.js)</h2>
+        <button type="button" id="close-modal-btn" class="close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="test-summary" class="test-summary"></div>
+      <ul id="test-results-list" class="test-results-list"></ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="tests.js"></script>
+</body>
+</html>
